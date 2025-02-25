@@ -7,14 +7,32 @@ import { LatLngExpression, LatLng, Map as LeafletMap } from "leaflet";
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
-// Dynamically import Leaflet components
-const MapContainer = dynamic(() => import("react-leaflet").then((mod) => mod.MapContainer), { ssr: false });
-const TileLayer = dynamic(() => import("react-leaflet").then((mod) => mod.TileLayer), { ssr: false });
-const Marker = dynamic(() => import("react-leaflet").then((mod) => mod.Marker), { ssr: false });
-const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), { ssr: false });
-const Polyline = dynamic(() => import("react-leaflet").then((mod) => mod.Polyline), { ssr: false });
+// Dynamically import Leaflet components with noSSR
+const MapContainer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.MapContainer),
+  { ssr: false }
+);
 
-// Import LayersControl and BaseLayer separately
+const TileLayer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.TileLayer),
+  { ssr: false }
+);
+
+const Marker = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Marker),
+  { ssr: false }
+);
+
+const Popup = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Popup),
+  { ssr: false }
+);
+
+const Polyline = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Polyline),
+  { ssr: false }
+);
+
 const LayersControl = dynamic(
   () => import("react-leaflet").then((mod) => mod.LayersControl),
   { ssr: false }
@@ -34,10 +52,13 @@ export default function LeafletMap() {
     const [markers, setMarkers] = useState<LatLngExpression[]>([]);
     const [geodesicLine, setGeodesicLine] = useState<GeodesicLine | null>(null);
     const [distance, setDistance] = useState<string | null>(null);
-    const [key, setKey] = useState(Date.now()); // Add key for forcing remount
     const mapRef = useRef<LeafletMap | null>(null);
+    const [mountMap, setMountMap] = useState(false);
 
     useEffect(() => {
+        // Only mount map after component is mounted
+        setMountMap(true);
+
         // Fix Leaflet's default icon issue
         delete L.Icon.Default.prototype._getIconUrl;
         L.Icon.Default.mergeOptions({
@@ -52,6 +73,7 @@ export default function LeafletMap() {
                 mapRef.current.remove();
                 mapRef.current = null;
             }
+            setMountMap(false);
         };
     }, []);
 
@@ -86,14 +108,20 @@ export default function LeafletMap() {
         setDistance(distance.toFixed(2));
     };
 
+    if (!mountMap) {
+        return null;
+    }
+
     return (
         <div className="relative w-full h-screen">
             <MapContainer 
-                key={key}
                 center={[20, 0]} 
                 zoom={3} 
                 className="h-full w-full"
                 whenCreated={(map) => {
+                    if (mapRef.current) {
+                        mapRef.current.remove();
+                    }
                     mapRef.current = map;
                     map.on('click', (e: L.LeafletMouseEvent) => {
                         const newMarker: LatLngExpression = [e.latlng.lat, e.latlng.lng];
