@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Interactive Geodesic Distance Calculator with Leaflet
 
-## Getting Started
+A Next.js application that demonstrates interactive map functionality using Leaflet. The application allows users to calculate geodesic distances between two points on Earth, plot great circle paths, and switch between different map styles.
 
-First, run the development server:
+## Features
 
+- Interactive map with multiple base layer options:
+  - OpenStreetMap Standard
+  - OpenStreetMap Humanitarian
+  - OpenStreetMap Cycling
+  - OpenStreetMap Transport
+  - Satellite Imagery
+  - Terrain View
+  - Topographic Map
+  - Dark Matter Theme
+  - Watercolor Style
+- Click-to-plot markers for start and end points
+- Automatic calculation of geodesic distance between markers
+- Visualization of great circle path between points
+- Responsive design with full-screen map
+- Real-time distance display in kilometers
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+- Node.js (version 16.x or higher)
+- npm (Node Package Manager)
+
+## Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd leaflet-map-app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Running the Application
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Start the development server:
+```bash
+npm run dev
+```
 
-## Learn More
+2. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-To learn more about Next.js, take a look at the following resources:
+## How to Use
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. The map loads with a default center position and zoom level
+2. Click anywhere on the map to place your first marker (start point)
+3. Click a second location to place the end point marker
+4. The application will automatically:
+   - Draw a geodesic line (great circle) between the points
+   - Calculate and display the distance in kilometers
+5. Click again to reset the markers and start a new measurement
+6. Use the layer control in the top-right corner to switch between different map styles
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Technologies Used
 
-## Deploy on Vercel
+- [Next.js](https://nextjs.org/) - React framework
+- [Leaflet](https://leafletjs.com/) - Interactive maps
+- [React Leaflet](https://react-leaflet.js.org/) - React components for Leaflet maps
+- [Turf.js](https://turfjs.org/) - Geospatial analysis
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+leaflet-map-app/
+├── src/
+│   └── app/
+│       ├── components/
+│       │   └── LeafletMap.tsx    # Main map component
+│       ├── layout.tsx
+│       └── page.tsx              # Main page component
+├── public/                       # Static assets
+├── package.json
+└── README.md
+```
+
+## Key Dependencies
+
+```json
+{
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "react-leaflet": "^4.2.1",
+    "@turf/turf": "^6.5.0"
+  }
+}
+```
+
+## Contributing
+
+Feel free to submit issues and enhancement requests.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Map tiles provided by OpenStreetMap and various contributors
+- Geodesic calculations powered by Turf.js
+- Map interface built with Leaflet
